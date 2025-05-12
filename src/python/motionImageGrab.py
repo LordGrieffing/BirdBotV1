@@ -1,12 +1,17 @@
+#!/usr/bin/env python3
 
 import datetime
 import os
+import RPi.GPIO as GPIO
 from picamera import PiCamera
 from gpiozero import MotionSensor
 from time import sleep
 
 
-
+# Set up LED pin
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(18,GPIO.OUT)
 
 def makeImageName():
     now = datetime.datetime.now()
@@ -22,7 +27,7 @@ def main():
     # Declare variables
     Pir = MotionSensor(23)
     camera = PiCamera()
-    imageDirect = "image_repo"
+    imageDirect = "/home/pi/BirdBotV1/image_repo"
 
     # Make needed directories if they don't exist
     os.makedirs(imageDirect, exist_ok=True)
@@ -32,6 +37,9 @@ def main():
     
     try:
         # Begin observation loop
+        # Turn on signal LED
+        GPIO.output(18, GPIO.HIGH)
+
         while True:
 
             # Wait until motion is detected
@@ -51,6 +59,11 @@ def main():
 
     except KeyboardInterrupt:
         print("exiting BirdBot")
+
+        # Turn off signal LED
+        GPIO.output(18, GPIO.LOW)
+        GPIO.cleanup()
+
         camera.close()
 
 if __name__ == "__main__":
