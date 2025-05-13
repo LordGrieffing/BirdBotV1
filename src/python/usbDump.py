@@ -3,9 +3,15 @@
 import os
 import shutil
 import time
+import RPi.GPIO as GPIO
 
 IMAGE_DIR = "/home/pi/BirdBotV1/image_repo"
 MOUNT_BASE = "/media/pi"
+
+# Set up LED pin
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(24,GPIO.OUT)
 
 def find_usb_drive():
     for entry in os.listdir(MOUNT_BASE):
@@ -15,6 +21,10 @@ def find_usb_drive():
     return None
 
 def copy_files_to_usb(usb_path):
+
+    # LED to signal that files are being transferred
+    GPIO.output(18, GPIO.HIGH)
+
     target_dir = os.path.join(usb_path, "birdbot_images")
     os.makedirs(target_dir, exist_ok=True)
     print(f"Copying images to {target_dir}")
@@ -27,9 +37,13 @@ def copy_files_to_usb(usb_path):
                 print(f"Copied: {file}")
 
                 # Delete file once it has been transferred
-                os.remove(dst)
+                os.remove(src)
     
     print("Done copying files.")
+
+    # Shut down LED signal
+    GPIO.output(24, GPIO.LOW)
+    GPIO.cleanup()
 
 def main():
     print("USB watcher started.")
