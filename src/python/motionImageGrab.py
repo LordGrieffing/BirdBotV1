@@ -37,14 +37,15 @@ def main():
     
     try:
         # Begin observation loop
-        # Turn on signal LED
-        GPIO.output(18, GPIO.HIGH)
 
         while True:
 
             # Wait until motion is detected
             print("Waiting for activity...")
             Pir.wait_for_active()
+
+            # Turn on signal LED
+            GPIO.output(18, GPIO.HIGH)
             print("Activity detected")
             # Generate image name
             imageName = makeImageName()
@@ -56,12 +57,11 @@ def main():
 
             # Wait a little before allowing the next image to be taken
             sleep(10)
+            # Turn off signal LED
+            GPIO.output(18, GPIO.LOW)
 
     except KeyboardInterrupt:
         print("exiting BirdBot")
-
-        # Turn off signal LED
-        GPIO.output(18, GPIO.LOW)
         GPIO.cleanup()
 
         camera.close()
