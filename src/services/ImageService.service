@@ -1,0 +1,14 @@
+[Unit]
+Description=BirdBot Motion Camera
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=root
+ExecStart=/bin/bash -c 'cd /home/pi/BirdBotV1/src/python && python3 motionImageGrab.py'
+StandardOutput=inherit
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
