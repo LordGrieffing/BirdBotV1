@@ -46,6 +46,10 @@ def main():
 
             # Turn on signal LED
             GPIO.output(18, GPIO.HIGH)
+
+            # Wait a moment for the movement to stop
+            sleep(2)
+
             print("Activity detected")
             # Generate image name
             imageName = makeImageName()
@@ -55,10 +59,12 @@ def main():
             camera.capture(imageName)
             print(f"Image captured, Saved:  {imageName}")
 
-            # Wait a little before allowing the next image to be taken
-            sleep(10)
+
             # Turn off signal LED
             GPIO.output(18, GPIO.LOW)
+            
+            # Wait a little before allowing the next image to be taken
+            sleep(10)
 
     except KeyboardInterrupt:
         print("exiting BirdBot")
