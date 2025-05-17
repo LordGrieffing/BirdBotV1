@@ -70,7 +70,5 @@ def main():
         print("exiting BirdBot")
         GPIO.cleanup()
 
-        camera.close()
-
 if __name__ == "__main__":
     main()
