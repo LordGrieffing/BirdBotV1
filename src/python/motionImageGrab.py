@@ -3,7 +3,7 @@
 import datetime
 import os
 import RPi.GPIO as GPIO
-from picamera import PiCamera
+from picamzero import Camera
 from gpiozero import MotionSensor
 from time import sleep
 
@@ -26,8 +26,8 @@ def main():
 
     # Declare variables
     Pir = MotionSensor(23)
-    camera = PiCamera()
-    imageDirect = "/home/pi/BirdBotV1/image_repo"
+    camera = Camera()
+    imageDirect = "/home/rain/BirdBotV1/image_repo"
 
     # Make needed directories if they don't exist
     os.makedirs(imageDirect, exist_ok=True)
@@ -56,7 +56,7 @@ def main():
             imageName = os.path.join(imageDirect, f"{imageName}.jpg")
 
             # take a photo
-            camera.capture(imageName)
+            camera.take_photo(imageName)
             print(f"Image captured, Saved:  {imageName}")
 
 
