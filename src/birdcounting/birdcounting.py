@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import csv
+import shutil
 from ultralytics import YOLO
 
 
@@ -33,6 +34,9 @@ def main():
 
     # Read csv as dataframe
     birddata = pd.read_csv(results_Path)
+
+    # List to store new rows being added
+    new_rows = []
     
     
     # Loop through all the images in the unclassified folder
@@ -47,21 +51,33 @@ def main():
         # Get a path to the image
         file_path = os.path.join(image_Folder, filename)
 
-        # Run the model over the image
-        results = model(file_path)
+        try:
 
-        # Parse results
-        boxes = results[0].boxes
+            # Run the model over the image
+            results = model(file_path)
 
-        # Cycle through spotted birds
-        for box in boxes:
-            class_id = int(box.cls.item())
-            bird_species = results[0].names[class_id]
+            # Parse results
+            boxes = results[0].boxes
 
-            # Add entry
-            birddata.loc[-1] = [bird_species, year, month, day, hour]
-            birddata.index = birddata.index + 1
+            # Cycle through spotted birds
+            for box in boxes:
+                class_id = int(box.cls.item())
+                bird_species = results[0].names[class_id]
 
+                # Add entry
+                new_rows.append([bird_species, year, month, day, hour])
+                birddata.index = birddata.index + 1
+
+            # Move file out of unclassfied files
+            shutil.move(file_path, os.path.join(finished_Image_Folder, filename))
+
+        except Exception as e:
+            print(f"Error processing {filename}: {e}")
+
+
+    # Update birddata
+    temp_frame = pd.DataFrame(new_rows, columns=labels)
+    birddata = pd.concat([temp_frame, birddata], ignore_index=True)
 
     # Save updated data frame
     birddata.to_csv(results_Path)
