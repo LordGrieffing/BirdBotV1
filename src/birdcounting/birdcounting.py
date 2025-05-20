@@ -1,9 +1,24 @@
 import pandas as pd
+import numpy as np
 import os
 import csv
 import shutil
 from ultralytics import YOLO
 
+def countDistinct(boxes):
+
+    res = 1
+
+    for i in range(1, boxes.shape[0]):
+        j = 0
+        for j in range(i):
+            if (boxes[i].cls.item() == boxes[j].cls.item()):
+                break
+
+        if (i == j + 1):
+            res += 1
+
+    return res
 
 def main():
 
@@ -18,7 +33,7 @@ def main():
     results_Path = os.path.join(classified_Results, results_file)
 
     # CSV labels
-    labels = ['Species', 'Year', 'Month', 'Day', 'Hour']
+    labels = ['Species', 'Quantity', 'Year', 'Month', 'Day', 'Hour']
 
 
     # Make sure directories exist, if not create directories
@@ -37,6 +52,7 @@ def main():
 
     # List to store new rows being added
     new_rows = []
+    specimen_count = np.empty((1,2))
     
     
     # Loop through all the images in the unclassified folder
@@ -58,6 +74,8 @@ def main():
 
             # Parse results
             boxes = results[0].boxes
+
+            species_count = countDistinct(boxes)
 
             # Cycle through spotted birds
             for box in boxes:
