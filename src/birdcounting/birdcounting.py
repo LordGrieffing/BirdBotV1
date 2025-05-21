@@ -52,7 +52,7 @@ def main():
 
     # List to store new rows being added
     new_rows = []
-    specimen_count = np.empty((1,2))
+    #specimen_count = np.empty((1,2))
     
     
     # Loop through all the images in the unclassified folder
@@ -75,7 +75,7 @@ def main():
             # Parse results
             boxes = results[0].boxes
 
-            species_count = countDistinct(boxes)
+            #species_count = countDistinct(boxes)
 
             # Cycle through spotted birds
             for box in boxes:
