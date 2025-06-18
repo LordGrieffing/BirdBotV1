@@ -23,7 +23,7 @@ def find_usb_drive():
 def copy_files_to_usb(usb_path):
 
     # LED to signal that files are being transferred
-    GPIO.output(18, GPIO.HIGH)
+    GPIO.output(24, GPIO.HIGH)
 
     target_dir = os.path.join(usb_path, "birdbot_images")
     os.makedirs(target_dir, exist_ok=True)
