@@ -5,8 +5,8 @@ import shutil
 import time
 import RPi.GPIO as GPIO
 
-IMAGE_DIR = "/home/pi/BirdBotV1/image_repo"
-MOUNT_BASE = "/media/pi"
+IMAGE_DIR = "/home/rain/BirdBotV1/image_repo"
+MOUNT_BASE = "/media/rain"
 
 # Set up LED pin
 GPIO.setmode(GPIO.BCM)
