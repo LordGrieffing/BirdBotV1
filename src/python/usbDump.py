@@ -43,20 +43,25 @@ def copy_files_to_usb(usb_path):
 
     # Shut down LED signal
     GPIO.output(24, GPIO.LOW)
-    GPIO.cleanup()
 
 def main():
-    print("USB watcher started.")
-    seen = False
-    while True:
-        usb_path = find_usb_drive()
-        if usb_path and not seen:
-            print(f"USB detected: {usb_path}")
-            copy_files_to_usb(usb_path)
-            seen = True
-        elif not usb_path:
-            seen = False  # Reset when USB is removed
-        time.sleep(5)
+
+    try:
+        print("USB watcher started.")
+        seen = False
+        while True:
+            usb_path = find_usb_drive()
+            if usb_path and not seen:
+                print(f"USB detected: {usb_path}")
+                copy_files_to_usb(usb_path)
+                seen = True
+            elif not usb_path:
+                seen = False  # Reset when USB is removed
+            time.sleep(5)
+
+    except KeyboardInterrupt:
+        print("exiting usb dump")
+        GPIO.cleanup()
 
 if __name__ == "__main__":
     main()
