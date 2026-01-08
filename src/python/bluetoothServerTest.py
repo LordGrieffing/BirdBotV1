@@ -3,7 +3,7 @@ import bluetooth
 
 # Label socket
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-server_sock.bind(("", bluetooth.PORT_ANY))
+server_sock.bind(("", 3))
 server_sock.listen(1)
 
 
