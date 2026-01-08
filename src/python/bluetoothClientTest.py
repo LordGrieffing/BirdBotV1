@@ -1,13 +1,17 @@
 import bluetooth
 
+services = bluetooth.find_service(name="BirdBotImageTransfer")
+
+if not services:
+    raise RuntimeError("BirdBot service not found")
+
+svc = services[0]
+
 sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-sock.connect(("2c:cf:67:af:d9:a7", 3))
+sock.connect((svc["host"], svc["port"]))
 
 with open("/home/jacob/BirdBotV1/src/python/received.jpg", "wb") as f:
-    while True:
-        data = sock.recv(1024)
-        if not data:
-            break
+    while data := sock.recv(1024):
         f.write(data)
 
 sock.close()
